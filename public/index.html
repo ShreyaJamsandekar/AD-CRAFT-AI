@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AD-CRAFT AI | Personalized Ad Tracking & Generation Prototype</title>
+  <meta name="description" content="AI-assisted ad tracking prototype using a deterministic Blackboard multi-agent architecture powered by local Ollama model llama3.2:1b.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-logo-icon">⚡</div>
+        <div class="brand-text">
+          <h1>AD-CRAFT <span class="brand-accent">AI</span></h1>
+          <p class="brand-tagline">Personalized Ad Generation • Deterministic Blackboard Flow • AppLovin MAX Grounded</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="tech-badge" id="ollamaStatusBadge"><span class="dot green"></span> 🦙 Ollama llama3.2:1b Connected</span>
+        <span class="tech-badge"><span class="dot cyan"></span> OpenRTB 2.5 Signals</span>
+        <span class="tech-badge"><span class="dot violet"></span> 2 Ad Variants</span>
+      </div>
+    </header>
+
+    <!-- Clean Simulation Control Bar -->
+    <section class="control-panel glass-panel" aria-label="Ad Generation Controls">
+      <div class="control-group profile-select-group">
+        <div class="control-label-row">
+          <label for="userSelect">
+            <span class="label-icon">👤</span> Target User Profile
+          </label>
+          <button id="openAddUserBtn" class="btn btn-xs btn-add-user" title="Add your own custom user profile">
+            ➕ Add Custom User
+          </button>
+        </div>
+        <select id="userSelect" class="form-select"></select>
+      </div>
+
+      <div class="control-group">
+        <label for="themeSelect">
+          <span class="label-icon">🎨</span> Creative Theme
+        </label>
+        <select id="themeSelect" class="form-select">
+          <option value="auto">🎲 Auto-Adaptive (AI Chooses 2)</option>
+          <option value="humor_zen">😂 Witty vs 🌿 Zen Mindful</option>
+          <option value="prestige_action">👑 VIP Luxury vs ⚡ High-Velocity</option>
+          <option value="hacker_deal">💡 Life-Hacker vs 🏷️ Flash Deal</option>
+          <option value="rebel_community">💥 Bold Rebel vs 🤝 Community</option>
+          <option value="adrenaline_wellness">🔥 Beast Mode vs 🧘 Wellness</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="slotSelect">
+          <span class="label-icon">📐</span> Display Format
+        </label>
+        <select id="slotSelect" class="form-select"></select>
+      </div>
+
+      <div class="control-group">
+        <label for="networkSelect">
+          <span class="label-icon">📶</span> Network Buffer
+        </label>
+        <select id="networkSelect" class="form-select"></select>
+      </div>
+
+      <div class="control-group threshold-group">
+        <div class="threshold-label-row">
+          <label for="thresholdInput">
+            <span class="label-icon">🎯</span> Score Threshold
+          </label>
+          <span id="thresholdVal" class="threshold-badge">85</span>
+        </div>
+        <input type="range" id="thresholdInput" min="70" max="95" value="85" step="1" class="form-range">
+      </div>
+
+      <div class="control-actions">
+        <button id="runBtn" class="btn btn-primary">
+          <span class="btn-icon">⚡</span> Create Ads with Ollama
+        </button>
+      </div>
+    </section>
+
+    <!-- Active User Profile Bar -->
+    <section class="active-profile-bar glass-panel" id="activeProfileBar">
+      <!-- Populated dynamically by JS -->
+    </section>
+
+    <!-- Visual Agent Flow (The Animated Creation Pipeline) -->
+    <section class="visual-flow-section glass-panel" aria-label="Visual Pipeline Flow">
+      <div class="flow-section-header">
+        <div class="flow-header-title">
+          <span class="flow-pulse-indicator"></span>
+          <h2>⚡ Live Agent Data Flow & Creation Pipeline</h2>
+        </div>
+        <span class="flow-subtitle">Signals flow from Ingestion → Math Agent → Subagents (Persona, Image, Video) → Feedback Gate → Outputs</span>
+      </div>
+
+      <!-- Injected by FlowVisualizer -->
+      <div id="flowVisualizerContainer" class="flow-visualizer-mount"></div>
+    </section>
+
+    <!-- Realtime Multi-Agent Telemetry & Blackboard Logs Console -->
+    <section class="live-console-section glass-panel" aria-label="Live Multi-Agent Terminal Console">
+      <div class="console-header">
+        <div class="console-title">
+          <span class="console-dot-green"></span>
+          <h3>🖥️ Live Agent Pipeline Telemetry & Execution Logs</h3>
+        </div>
+        <div class="console-actions">
+          <span class="console-badge" id="consoleLiveBadge">AWAITING TRIGGER</span>
+          <button id="clearConsoleBtn" class="btn btn-xs btn-outline">Clear Logs</button>
+        </div>
+      </div>
+      <div class="console-terminal-body" id="liveConsoleBody">
+        <div class="terminal-log-line info">
+          <span class="log-ts">[Ready]</span> <span class="log-tag tag-sys">SYSTEM</span> Dashboard online. Click "Create Ads with Ollama" to watch real-time multi-agent execution.
+        </div>
+      </div>
+    </section>
+
+    <!-- The Outputs Section (Clean, Spacious Ad Previews) -->
+    <section class="outputs-section glass-panel" id="outputsSection">
+      <div class="outputs-header">
+        <div class="outputs-title-group">
+          <h2>📱 Certified Ad Variants</h2>
+          <span class="outputs-sub" id="outputsSubNotice">Generated in real-time by Creativation Engine & Ollama LLM</span>
+        </div>
+        <div class="variant-toggle-tabs">
+          <button class="variant-tab active" data-variant="both">Side-by-Side</button>
+          <button class="variant-tab" data-variant="a">Variant A</button>
+          <button class="variant-tab" data-variant="b">Variant B</button>
+        </div>
+      </div>
+
+      <!-- Delivery Gate Notice -->
+      <div id="deliveryConstraintNotice" class="constraint-alert">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- 2 Ad Variants Grid -->
+      <div id="adVariantsContainer" class="variants-grid">
+        <!-- Variant A Card -->
+        <div id="variantACard" class="ad-variant-wrapper">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Variant B Card -->
+        <div id="variantBCard" class="ad-variant-wrapper">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal: Add Custom Synthetic User -->
+    <div class="modal-overlay" id="addUserModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>➕ Add Custom User Profile</h3>
+          <button class="modal-close-btn" id="closeAddUserBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Define a new synthetic user with your own category interests, demographics, and bidding signals. The pipeline and Ollama model will generate ads tailored specifically to this profile!</p>
+          
+          <form id="addUserForm" class="modal-form-grid">
+            <div class="form-field full-width">
+              <label for="customName">Profile Name & Avatar</label>
+              <div class="name-avatar-row">
+                <input type="text" id="customAvatar" value="👤" maxlength="2" class="form-input avatar-input" title="Emoji Avatar">
+                <input type="text" id="customName" placeholder="e.g., Maya Lin - Specialty Coffee Lover" required class="form-input">
+              </div>
+            </div>
+
+            <div class="form-field full-width">
+              <label for="customAffinity">Primary Category / Interest Affinity <span class="required">*</span></label>
+              <input type="text" id="customAffinity" placeholder="e.g., Specialty Coffee, Pour-over Gear & Single Origin Beans" required class="form-input highlight-field">
+              <span class="field-hint">The Ollama model will write ad copy and choose creative angles based on this!</span>
+            </div>
+
+            <div class="form-field">
+              <label for="customAge">Age</label>
+              <input type="number" id="customAge" value="28" min="14" max="90" class="form-input">
+            </div>
+
+            <div class="form-field">
+              <label for="customGender">Gender</label>
+              <select id="customGender" class="form-select">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Non-Binary">Non-Binary</option>
+                <option value="Unspecified">Unspecified</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="customCity">City / Location</label>
+              <input type="text" id="customCity" value="Seattle, WA" class="form-input">
+            </div>
+
+            <div class="form-field">
+              <label for="customAppName">Publisher Host App Context</label>
+              <input type="text" id="customAppName" value="Daily Roast Reader" class="form-input">
+            </div>
+
+            <div class="form-field">
+              <label for="customLtv">Predicted LTV Tier</label>
+              <select id="customLtv" class="form-select">
+                <option value="High ($80 - $250 / yr)">High ($80 - $250 / yr)</option>
+                <option value="Mid ($30 - $75 / yr)">Mid ($30 - $75 / yr)</option>
+                <option value="Ultra-High ($300+ / yr)">Ultra-High ($300+ / yr)</option>
+                <option value="Low (Free / Ad-supported)">Low (Free / Ad-supported)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="customCtr">Historical CTR (%)</label>
+              <input type="number" id="customCtr" value="4.2" step="0.1" min="0.1" max="25" class="form-input">
+            </div>
+
+            <div class="modal-actions full-width">
+              <button type="button" class="btn btn-outline" id="cancelAddUserBtn">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="saveUserBtn">💾 Save & Select Profile</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Smartphone Device Simulator Modal -->
+    <div class="modal-overlay" id="deviceSimulatorModal">
+      <div class="modal-container">
+        <button class="modal-close-btn" id="closeSimulatorModalBtn">✕</button>
+        <div class="simulator-modal-grid" id="simulatorModalContent">
+          <!-- Populated by AdRenderer.openDeviceModal -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>AI-Assisted Ad Tracking Prototype • Powered by Ollama llama3.2:1b & Blackboard Multi-Agent System • AppLovin MAX Standards</p>
+    </footer>
+  </div>
+
+  <script type="module" src="js/flow_visualizer.js"></script>
+  <script type="module" src="js/renderer.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

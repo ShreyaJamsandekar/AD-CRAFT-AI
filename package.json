@@ -1,0 +1,21 @@
+{
+  "name": "ai-assisted-ad-tracking-prototype",
+  "version": "1.0.0",
+  "description": "Prototype of Personalized AI-Assisted Advertisements using Blackboard Multi-Agent Architecture",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "adtech",
+    "openrtb",
+    "applovin",
+    "blackboard-architecture",
+    "multi-agent",
+    "personalized-ads"
+  ],
+  "author": "Antigravity AI Team",
+  "license": "MIT"
+}
