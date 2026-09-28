@@ -143,7 +143,7 @@ The project runs on native Node.js (v18+) with **zero external package installat
 
 ```bash
 # Navigate to the project directory
-cd "c:\Users\Smitesh\Shreya\Projects\AI- Assisted AD tracking"
+cd "c:\Users\AI- Assisted AD tracking"
 
 # Start the server
 node server.js
